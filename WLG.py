@@ -7,7 +7,7 @@ class weighted_regression:
         Info here
     """
 
-    def __init__(self,x,y,tau):
+    def __init__(self,x,y):
         """
             INPUTS:
                    x: feature values (m x n)
@@ -16,9 +16,9 @@ class weighted_regression:
         """
 
 
-        self.__calculate(x,y,tau)
+        self.__calculate(x,y)
 
-    def __calculate(self, x, y, tau):
+    def __calculate(self, x, y):
         """
             Main funtion to find ybar
         """
@@ -27,14 +27,22 @@ class weighted_regression:
 
         intercept = np.ones((m,1))
         X = np.concatenate((intercept,x), axis=1)
-        XtX=np.dot(X.transpose,X)
+        XtX=np.dot(X.transpose(),X)
+        
+        print(XtX)
+        theta = np.dot(np.linalg.inv(XtX), X.transpose())
+        theta = np.dot(theta,y)
 
-        theta = inv(XtX) * X.transpose * y
-        #for i in range(m):
-        #    for j in range(n):
-        #        h = np.dot(X*theta)
-        #        theta
-
-
+        return self.__decision(X, theta)
+        
     def __decision(self, X, theta):
-        return ybar = np.dot(X*theta)
+        self.ybar = np.dot(X,theta)
+        
+    def error_norm(self,y):
+        error = self.ybar - y
+        norm = np.linalg.norm(error) 
+        print(norm)
+        m = error.size
+        avg_error = np.sum(norm) / m
+        return avg_error
+    
