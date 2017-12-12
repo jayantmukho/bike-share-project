@@ -43,7 +43,7 @@ parser.add_argument(
     help="Valid model types: {'wide', 'deep', 'wide_deep'}.")
 
 parser.add_argument(
-    '--train_epochs', type=int, default=40, help='Number of training epochs.')
+    '--train_epochs', type=int, default=100, help='Number of training epochs.')
 
 parser.add_argument(
     '--epochs_per_eval', type=int, default=2,
@@ -175,13 +175,25 @@ def main(unused_argv):
 
     results = model.evaluate(input_fn=lambda: input_fn(
         FLAGS.test_data, 1, False, FLAGS.batch_size))
-
+       
+    predictions = list(model.predict(input_fn=input_fn(FLAGS.test_data, 1, False,FLAGS.batch_size)))
+    print(str(predictions))
+    #features, labels = input_fn(FLAGS.test_data, 1, False, FLAGS.batch_size)
+    #print(labels)
+    #predictions = model.predict(input_fn=lambda: input_fn(
+    #    FLAGS.test_data, 1, False, FLAGS.batch_size))
+    #mean_abs_err = tf.metrics.mean_absolute_error(labels, predictions)
+    #print(mean_squared_error)
+    
     # Display evaluation metrics
     print('Results at epoch', (n + 1) * FLAGS.epochs_per_eval)
     print('-' * 60)
-
+    
+    
+    # loss is mean squared error for regression, CE for classification
     for key in sorted(results):
       print('%s: %s' % (key, results[key]))
+      
 
 
 if __name__ == '__main__':
