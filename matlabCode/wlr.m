@@ -7,7 +7,7 @@ xTest = testData(:,2:end);
 mTest = length(yTest);
 xTest = [ones(mTest,1) xTest];
 
-sets = [500, 1000, 2000, 4000, 8000, 15000, 30000,  68303-mTest];
+sets = [500, 1000, 2000, 4000, 8000, 15000, 30000,  66404-mTest];
 trainAvgErr = zeros(length(sets),1);
 testAvgErr = trainAvgErr;
 yTrainLoss = trainAvgErr;
@@ -46,7 +46,7 @@ legend('Training Error', 'Test Error','Desired Error');
 xlabel('Training set size');
 ylabel({'$||y-\bar{y}||_2/m$'},'Interpreter','latex');
 title('Error in Prediction of trip duration');
-axis([sets(1) sets(end) 0 max(trainAvgErr)+10])
+axis([sets(1) sets(end) 0 max(trainAvgErr)])
 
 figure(2)
 loglog(sets,yTrainLoss,sets,yTestLoss)%, sets, mean(y)/100*ones(length(sets),1),'k')
