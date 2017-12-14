@@ -43,7 +43,7 @@ parser.add_argument(
     help="Valid model types: {'wide', 'deep', 'wide_deep'}.")
 
 parser.add_argument(
-    '--train_epochs', type=int, default=30, help='Number of training epochs.')
+    '--train_epochs', type=int, default=100, help='Number of training epochs.')
 
 parser.add_argument(
     '--epochs_per_eval', type=int, default=2,
@@ -53,7 +53,7 @@ parser.add_argument(
     '--batch_size', type=int, default=40, help='Number of examples per batch.')
 
 parser.add_argument(
-    '--train_data', type=str, default='nnTrainSet_15000.csv',
+    '--train_data', type=str, default='nnData_undersample.csv',
     help='Path to the training data.')
 
 parser.add_argument(
@@ -61,7 +61,7 @@ parser.add_argument(
     help='Path to the test data.')
 
 _NUM_EXAMPLES = {
-    'train': 15000,
+    'train': 289786,
     'validation': 10000,
 }
 
@@ -88,12 +88,12 @@ def build_model_columns():
 
   deep_columns = [
       station_dist,
-      #humidity ,
-      #visibility,
-      #wind,
+      humidity ,
+      visibility,
+      wind,
       precip,
-      #cloud,
-      #events,
+      cloud,
+      events,
       start_time,
       temp,
       tf.feature_column.indicator_column(day_week),
@@ -105,7 +105,7 @@ def build_model_columns():
 def build_estimator(model_dir, model_type):
   """Build an estimator appropriate for the given model type."""
   deep_columns = build_model_columns()
-  hidden_units = [10,5,2]
+  hidden_units = [500,400,300,100]
   
   # Create a tf.estimator.RunConfig to ensure the model is run on CPU, which
   # trains faster than GPU for this model.
@@ -182,6 +182,7 @@ def main(unused_argv):
     # Display evaluation metrics
     print('Results at epoch', (n + 1) * FLAGS.epochs_per_eval)
     print('-' * 60)
+    
     
     
     # loss is mean squared error for regression, CE for classification
